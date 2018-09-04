@@ -18,7 +18,7 @@ cur=0
 
 echo "$xml" | grep location | sed -r "s| *<location>(.+)</location>|\1|g" | \
 while read url; do # iterate over locations
-  ((cur++))
+  ((cur=cur+1))
   echo "Processing $url ($cur/$all) ..."
   f=$(basename "$url") # get just the filename: "HASH-sth.cab"
   F="$OUT/$f" # output location
