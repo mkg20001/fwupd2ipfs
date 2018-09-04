@@ -16,7 +16,8 @@ mkdir -p "$OUT"
 all=$(echo "$xml" | grep location | wc -l)
 cur=0
 
-echo "$xml" | grep location | sed -r "s| *<location>(.+)</location>|\1|g" | \
+main() {
+
 while read url; do # iterate over locations
   ((cur=cur+1))
   echo "Processing $url ($cur/$all) ..."
@@ -41,3 +42,7 @@ while read url; do # iterate over locations
 done
 
 echo -n "$xml" | gzip > "$OUT/firmware.xml.gz"
+
+}
+
+echo "$xml" | grep location | sed -r "s| *<location>(.+)</location> *|\1|g" | main
