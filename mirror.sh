@@ -44,7 +44,7 @@ done
 echo "Writing output ..."
 
 meta="$OUT/firmware.xml.gz"
-echo -n "$xml" | gzip > "$meta"
+echo "$xml" | gzip > "$meta"
 hash=$(ipfs add -wQ "$meta" | tee "$meta.ipfs")
 echo "Final Hash: $hash - $hash/firmware.xml.gz"
 echo "Final URL: $GATEWAY/$hash/firmware.xml.gz"
