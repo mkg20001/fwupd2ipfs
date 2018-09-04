@@ -13,9 +13,13 @@ xml=$(curl -s https://cdn.fwupd.org/downloads/firmware.xml.gz | gzip -d) # get a
 
 mkdir -p "$OUT"
 
+all=$(echo "$xml" | grep location | wc -l)
+cur=0
+
 echo "$xml" | grep location | sed -r "s| *<location>(.+)</location>|\1|g" | \
 while read url; do # iterate over locations
-  echo "Processing $url ..."
+  ((cur++))
+  echo "Processing $url ($cur/$all) ..."
   f=$(basename "$url") # get just the filename: "HASH-sth.cab"
   F="$OUT/$f" # output location
   if [ ! -e "$F.ipfs" ]; then # if not added to ipfs,
