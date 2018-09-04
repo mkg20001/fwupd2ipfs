@@ -41,7 +41,13 @@ while read url; do # iterate over locations
   xml=${xml/"$url"/"$newURL"} # replace url in xml
 done
 
-echo -n "$xml" | gzip > "$OUT/firmware.xml.gz"
+echo "Writing output ..."
+
+meta="$OUT/firmware.xml.gz"
+echo -n "$xml" | gzip > "$meta"
+hash=$(ipfs add -wQ "$meta" | tee "$meta.ipfs")
+echo "Final Hash: $hash - $hash/firmware.xml.gz"
+echo "Final URL: $GATEWAY/$hash/firmware.xml.gz"
 
 }
 
