@@ -23,7 +23,12 @@ while read url; do # iterate over locations
   f=$(basename "$url") # get just the filename: "HASH-sth.cab"
   F="$OUT/$f" # output location
   if [ ! -e "$F.ipfs" ]; then # if not added to ipfs,
-    wget "$url" -O "$F" # download firmware
+    ex=0
+    wget "$url" -O "$F" || ex=$? # download firmware
+    if [ $ex -eq 8 ]; then
+      echo "Download failed, retaining URL as $url"
+      continue
+    fi
     ipfs add -wQ "$F" > "$F.ipfs" # create hash for file wrapped with directory. wrapped so real filename can be used in url
   fi
   hash=$(cat "$F.ipfs") # load hash
