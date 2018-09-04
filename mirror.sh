@@ -37,7 +37,7 @@ while read url; do # iterate over locations
     exit 2
   fi
   newURL=$(echo "$GATEWAY/$hash/$f") # generate new url
-  xml=$(echo -n "$xml" | sed "s|$url|$newURL|g") # replace url in xml
+  xml=${xml/"$url"/"$newURL"} # replace url in xml
 done
 
 echo -n "$xml" | gzip > "$OUT/firmware.xml.gz"
