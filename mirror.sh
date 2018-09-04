@@ -17,7 +17,12 @@ for url in $(echo "$xml" | grep location | sed -r "s| *<location>(.+)</location>
   f=$(basename "$url") # get just the filename: "HASH-sth.cab"
   F="$OUT/$f" # output location
   if [ ! -e "$F.ipfs" ]; then # if not added to ipfs,
-    wget "$url" -O "$F" # download firmware
+    ex=0
+    wget "$url" -O "$F" || ex=$? # download firmware, if fails save exit code
+    if [ $ex -eq 8 ]; then
+      echo "Got server error for $url - retaining original url"
+      continue
+    fi
     ipfs add -wQ "$F" > "$F.ipfs" # create hash for file wrapped with directory. wrapped so real filename can be used in url
   fi
   hash=$(cat "$F.ipfs") # load hash
